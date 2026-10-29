@@ -1,0 +1,34 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Demo repo built by scripts/make_demo_repo.py (has its own .git)
+workspace/
+
+# Generated data and models
+*.db
+*.sqlite3
+models/*.joblib
+*.pkl
+
+# Editors and OS
+.vscode/*
+!.vscode/settings.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/secrets.toml

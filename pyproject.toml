@@ -1,0 +1,9 @@
+[project]
+name = "oracle"
+version = "0.0.1"
+description = "A soft-computing bug investigator (Soft Computing project, MCA Sem 3, MNNIT Allahabad)"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]      # lets tests `import oracle` without installing the package
+testpaths = ["tests"]

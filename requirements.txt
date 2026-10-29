@@ -1,0 +1,26 @@
+# Core
+pydantic>=2.6,<3
+python-dotenv>=1.0,<2
+PyYAML>=6.0,<7
+GitPython>=3.1.40,<4
+
+# Soft computing
+numpy>=1.26,<3
+scikit-learn>=1.4,<2
+scikit-fuzzy>=0.5,<0.6
+networkx>=3.2,<4          # scikit-fuzzy's control API needs this
+
+# Dashboard
+streamlit>=1.35,<2
+plotly>=5.20,<7
+pyvis>=0.3.2,<0.4
+
+# Testing
+pytest>=8.0,<10
+
+# Optional LLM explainer (uncomment the one you use)
+# google-genai>=1.0        # LLM_PROVIDER=gemini
+# ollama>=0.3              # LLM_PROVIDER=ollama
+
+# Once everything installs cleanly on all four laptops, freeze exact versions with:
+#   pip freeze > requirements.lock.txt
