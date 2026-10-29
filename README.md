@@ -43,7 +43,7 @@ pytest                             # should print "1 passed"
 Each member adds their own row in their first pull request (see `docs/CONTRIBUTING.md`).
 
 | Member | GitHub | Role | Soft computing module |
-|---|---|---|---|
+| Rahul | @rahulparmar123942 | Dashboard + GA | Test prioritisation |
 
 ## How we built this
 
