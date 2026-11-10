@@ -1,0 +1,15 @@
+{
+  "name": "oracle-repository-investigator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A read-only GitHub repository investigation MVP for ORACLE.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "api": "python -m uvicorn oracle_api.main:app --host 127.0.0.1 --port 8001",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
