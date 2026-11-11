@@ -1,12 +1,22 @@
 services:
-  - type: web
-    name: oracle
-    runtime: docker
-    plan: free
+  - type: pserv
+    name: oracle-api
+    runtime: python
     region: oregon
-    dockerfilePath: ./Dockerfile
-    dockerContext: .
-    healthCheckPath: /
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m uvicorn oracle_api.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: LLM_PROVIDER
+        value: none
+
+  - type: web
+    name: oracle-web
+    runtime: node
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
       - key: SESSION_SECRET
         generateValue: true
@@ -14,10 +24,9 @@ services:
         sync: false
       - key: GITHUB_CLIENT_SECRET
         sync: false
-      - key: HOST
-        value: 0.0.0.0
-      - key: LLM_PROVIDER
-        value: none
-      - key: ORACLE_TOOLS_URL
-        value: http://127.0.0.1:8001
+      - key: ORACLE_TOOLS_HOSTPORT
+        fromService:
+          type: pserv
+          name: oracle-api
+          property: hostport
 
