@@ -22,6 +22,7 @@ workspace/
 *.sqlite3
 models/*.joblib
 *.pkl
+data/labeled_logs.csv
 
 # Editors and OS
 .vscode/*
@@ -32,3 +33,6 @@ Thumbs.db
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local rollback snapshots (never push these)
+.oracle-history/
