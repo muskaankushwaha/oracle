@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080e18">
+  <title>ORACLE — Digital detective for your codebase</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>.account-avatar{display:block;flex:0 0 31px;width:31px;height:31px;padding:0;border:1px solid #30445f;border-radius:50%;background:#101b2a;cursor:default;overflow:hidden}.account-avatar img{display:block;width:100%;height:100%;object-fit:cover}.severity-pill.clear{border-color:#225943;background:#0e281f;color:#48e0aa}.risk-value.clear{color:#20df9b}</style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/"><span class="brand-mark"><span></span></span><span>ORACLE<small>AI DIGITAL DETECTIVE<br>for Your Codebase</small></span></a>
+      <nav class="side-nav" aria-label="Main navigation">
+        <button class="side-link active" data-action="new"><span class="nav-icon">▤</span>New Investigation</button>
+        <button class="side-link" data-action="dashboard"><span class="nav-icon">♟</span>Dashboard</button>
+        <button class="side-link" data-action="investigations"><span class="nav-icon">▤</span>Investigations</button>
+        <button class="side-link" data-action="repositories"><span class="nav-icon">▱</span>Repositories</button>
+        <button class="side-link" data-action="logs"><span class="nav-icon">▦</span>Logs</button>
+        <button class="side-link" data-action="architecture"><span class="nav-icon">♧</span>Architecture</button>
+        <button class="side-link" data-action="pull-requests"><span class="nav-icon">↕</span>Pull Requests</button>
+        <button class="side-link" data-action="settings"><span class="nav-icon">⚙</span>Settings</button>
+      </nav>
+      <div class="sidebar-quote">“Find the truth<br>in your code.”<small>— ORACLE</small></div>
+      <div class="agent-mode"><span class="pulse"></span><span>Source Scan<br>Read-only</span></div>
+      <div class="sidebar-version">v0.1.0</div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <label class="search-box"><span class="search-icon">⌕</span><input id="search-findings" type="search" placeholder="Search findings, files, and evidence…" autocomplete="off"><kbd>Ctrl K</kbd></label>
+        <div class="topbar-right">
+          <label class="repository-control hidden" id="repository-control"><span class="github-mark">●</span><select id="repo-select" aria-label="Choose a GitHub repository"><option value="">Select repository…</option></select><span class="caret">⌄</span></label>
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to light mode" title="Switch to light mode" aria-pressed="false"><span class="daynight-scene" aria-hidden="true"><span class="daynight-sky"></span><span class="daynight-horizon"></span><span class="daynight-stars"></span><span class="daynight-moon"></span><span class="daynight-sun"></span><span class="daynight-cloud"></span></span></button><div id="user-menu"></div>
+          <nav class="product-nav" aria-label="ORACLE workflows"><button class="active" data-flow="Investigate">Investigate</button><button data-flow="Understand">Understand</button><button data-flow="Fix">Fix</button><button data-flow="Ship">Ship</button></nav>
+        </div>
+      </header>
+
+      <section id="welcome-panel" class="welcome-panel">
+        <div class="breadcrumb">Investigations <span>›</span> New Investigation</div>
+        <div class="welcome-card"><div class="welcome-orb">O</div><div class="eyebrow">AI DIGITAL DETECTIVE FOR YOUR CODEBASE</div><h1>Find the truth<br>in your <em>codebase.</em></h1><p>Connect GitHub, then scan public repositories from any GitHub account. ORACLE reads source files, surfaces risks, and gives you evidence to review.</p><a class="primary-button github-button" href="/auth/login"><span class="github-mark">●</span> Connect with GitHub <span>↗</span></a><div class="permission-note">◉ Profile access only <span>·</span> Public repositories <span>·</span> Read-only analysis</div></div>
+      </section>
+
+      <section id="dashboard" class="dashboard hidden">
+        <div class="breadcrumb">Investigations <span>›</span> <b id="crumb-repo">Repository review</b></div>
+        <div class="page-heading">
+          <div><h1 id="page-title">Repository review</h1><div class="issue-meta"><span class="severity-pill" id="headline-severity">Awaiting scan</span><span>Read-only source review</span><span class="meta-dot">•</span><a id="repo-subtitle-link" href="#">Select a public GitHub repository</a><span class="meta-dot">•</span><span id="branch-label">Default branch</span></div></div>
+          <div class="heading-actions"><input id="repo-url" class="repo-url-input" type="text" inputmode="url" autocomplete="url" placeholder="Paste public GitHub URL or owner/repo" aria-label="Public GitHub repository URL or owner and repository"><button id="share-button" class="secondary-button">♧ <span>Share</span></button><button id="analyze" class="primary-button" disabled>♧ <span>Run Full Investigation</span></button></div>
+        </div>
+        <section class="issue-prompt panel" aria-labelledby="issue-prompt-title">
+          <div><label id="issue-prompt-title" for="issue-report">What problem should ORACLE investigate?</label><p>Optional. Describe the symptom so the workflow can rank related source findings.</p></div>
+          <textarea id="issue-report" maxlength="1000" placeholder="Example: Checkout started returning 500 errors after yesterday’s deployment."></textarea>
+          <div><label id="log-input-title" for="log-text">Paste relevant error logs</label><p>Optional. Processed locally with a demo MLP trained on synthetic examples; remove secrets first.</p></div>
+          <textarea id="log-text" maxlength="20000" placeholder="Paste up to 100 representative log lines…"></textarea>
+        </section>
+        <nav class="report-tabs" aria-label="Investigation sections">
+          <button class="active" data-target="overview"><span>◉</span>Overview</button><button data-target="steps"><span>♧</span>Investigation Steps</button><button data-target="evidence-section"><span>▣</span>Evidence</button><button data-target="affected-files"><span>▱</span>Affected Files</button><button data-target="proposed-fix"><span>⚒</span>Proposed Fix</button><button data-target="tests"><span>▣</span>Tests</button><button data-target="timeline"><span>⌁</span>Timeline</button>
+        </nav>
+        <div id="error-banner" class="error-banner hidden" role="alert"></div>
+        <div id="loading" class="loading-panel hidden"><span class="spinner"></span><div><b>Investigating repository source</b><span>Reading files, checking patterns, and ranking evidence…</span></div></div>
+
+        <div id="report-content" class="hidden">
+          <section id="overview" class="overview-grid report-section">
+            <article class="summary-tile root-tile"><div class="tile-label"><span>◎</span> Leading finding</div><div id="lead-title" class="tile-primary">No findings yet</div><p id="lead-copy">Run a read-only scan to see the strongest source-level signal.</p></article>
+            <article class="summary-tile confidence-tile"><div class="tile-label"><span>◴</span> Confidence</div><div class="confidence-ring"><span id="confidence-value">—</span></div><div class="confidence-track"><i id="confidence-track-fill"></i></div></article>
+            <article class="summary-tile risk-tile"><div class="tile-label"><span>♟</span> Risk level</div><div id="risk-value" class="risk-value">Not rated</div><p id="risk-copy">Risk reflects detected heuristics.</p></article>
+            <article class="summary-tile status-tile"><div class="tile-label"><span>♧</span> Status</div><div class="status-value"><span class="status-dot"></span> <span id="status-value">Ready to investigate</span></div><p id="status-copy">No repository changes are made.</p></article>
+          </section>
+          <section class="panel hypothesis-panel report-section" aria-labelledby="hypotheses-title">
+            <div class="panel-heading"><h2 id="hypotheses-title"><span class="panel-icon purple">◎</span> Candidate hypotheses</h2><span id="hypothesis-count" class="subtle-meta">No candidates yet</span></div>
+            <p id="hypothesis-summary" class="hypothesis-summary">The investigation workflow will rank source findings against your issue description and show its scoring reasons.</p>
+            <div id="hypotheses-list" class="hypotheses-list"><div class="panel-empty">Run an investigation to see evidence-backed candidates.</div></div>
+            <p class="hypothesis-note">Bayesian estimates use hand-set rule scores as uncalibrated prior proxies. Fuzzy risk is a separate score. Neither is a validated probability or confirmed root cause.</p>
+          </section>
+          <section class="panel log-panel report-section" aria-labelledby="log-results-title">
+            <div class="panel-heading"><h2 id="log-results-title"><span class="panel-icon purple">⌁</span> Log category predictions</h2><span id="log-count" class="subtle-meta">No log lines supplied</span></div>
+            <p id="log-model-note" class="hypothesis-summary">Paste logs above to request best-effort MLP category labels.</p>
+            <div id="log-classifications" class="log-classifications"><div class="panel-empty">Log classification is optional.</div></div>
+          </section>
+
+          <section class="middle-grid">
+            <article class="panel summary-panel" id="steps">
+              <div class="panel-heading"><h2><span class="panel-icon blue">▣</span> Summary</h2><span id="scan-time" class="subtle-meta"></span></div>
+              <p id="summary-copy" class="summary-copy">Connect a public GitHub repository and run an investigation to review source-level findings and evidence.</p>
+              <div class="summary-metrics"><div class="metric green"><b id="metric-findings">0</b><span>Findings</span></div><div class="metric blue"><b id="metric-files">0</b><span>Files scanned</span></div><div class="metric amber"><b id="metric-large">0</b><span>Source files found</span></div><div class="metric purple"><b id="metric-branch">—</b><span>Default branch</span></div></div>
+            </article>
+            <article class="panel quick-panel"><div class="panel-heading"><h2><span class="panel-icon blue">♟</span> Quick Actions</h2></div><button class="quick-action" data-target="affected-files">▱ <span>View Affected Files</span></button><button class="quick-action" data-target="evidence-section">▣ <span>See Evidence</span></button><button class="quick-action" data-target="proposed-fix">⚒ <span>Review Fix Suggestions</span></button><button class="quick-action" data-target="tests">▣ <span>Testing &amp; Coverage</span></button></article>
+            <article class="panel tree-panel" id="affected-files"><div class="panel-heading"><h2><span class="panel-icon amber">▣</span> Repository Structure</h2><a id="repo-link" href="#" target="_blank" rel="noreferrer">View in GitHub ↗</a></div><div id="repo-tree" class="repo-tree"><span class="tree-empty">Choose a repository to preview scanned files.</span></div></article>
+          </section>
+
+          <section class="lower-grid">
+            <article class="panel evidence-panel report-section" id="evidence-section"><div class="panel-heading"><h2><span class="panel-icon blue">▣</span> Evidence &amp; Findings</h2><div class="finding-filters"><label class="visually-hidden" for="severity-filter">Filter findings by severity</label><select id="severity-filter" class="filter-select" aria-label="Filter findings by severity"><option value="all">All severities</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select><span id="finding-count" class="subtle-meta">No source evidence yet</span></div></div><div id="findings-list" class="findings-list"><div class="panel-empty">Run an investigation to gather source-level evidence.</div></div></article>
+            <article class="panel snippet-panel"><div class="panel-heading"><h2><span class="panel-icon blue">▣</span> Code Evidence</h2><span id="snippet-file" class="subtle-meta">Source file preview</span></div><pre id="code-snippet" class="code-snippet"><span class="code-muted">A finding's matching source line will appear here.</span></pre><div class="snippet-caption">Evidence is shown with secrets redacted where detected.</div></article>
+          </section>
+
+          <section class="bottom-grid">
+            <article class="panel map-panel"><div class="panel-heading"><h2><span class="panel-icon blue">♧</span> Repository Map</h2><span class="planned-label">SOURCE FILES</span></div><div id="repository-map" class="repository-map"><div class="map-empty">Repository structure appears after the scan.</div></div><p class="panel-note">Dependency graph analysis is planned for the next build stage.</p></article>
+            <article class="panel history-panel" id="timeline"><div class="panel-heading"><h2><span class="panel-icon blue">▣</span> Recent Activity</h2><span class="planned-label">NOT CONNECTED</span></div><div class="activity-empty"><span class="activity-icon">⌁</span><div><b>Commit history and deployment logs</b><p>ORACLE can classify logs pasted above; repository runtime logs and commit history are not connected.</p></div></div><div class="activity-row"><span class="activity-dot"></span><div><b id="activity-title">No investigation yet</b><p id="activity-copy">Select a repository to begin.</p></div><time id="activity-time">—</time></div></article>
+          </section>
+          <section class="panel fix-tests-panel report-section" id="proposed-fix"><div class="fix-tests-grid"><div><div class="panel-heading"><h2><span class="panel-icon amber">⚒</span> Proposed Fixes</h2></div><div id="fix-list" class="fix-list"><div class="panel-empty">Suggested next steps appear alongside each finding.</div></div></div><div id="tests" class="test-plan"><div class="panel-heading"><h2><span class="panel-icon blue">▣</span> Genetic algorithm test order</h2></div><p>Suggested from test-file names and inferred source coverage. ORACLE never executes repository code. Durations are assumed until run history is connected.</p><div id="test-plan-list" class="test-plan-list"><div class="panel-empty">Run an investigation to find and prioritize test files.</div></div><div class="test-note">✓ Read-only recommendation <span>·</span> Tests are not run</div></div></div></section>
+          <p id="disclaimer" class="disclaimer">Heuristic findings need engineer review. A clean scan does not prove the repository is free of bugs or security issues.</p>
+        </div>
+      </section>
+      <section id="account-settings" class="account-settings hidden" aria-label="Account settings">
+        <div class="account-card panel">
+          <img id="settings-avatar" class="settings-avatar" alt="GitHub profile">
+          <div id="settings-name" class="settings-name"></div>
+          <div id="settings-email" class="settings-email"></div>
+          <button id="settings-logout" class="logout-button" type="button">Log out</button>
+        </div>
+      </section>
+      <div id="toast" class="toast hidden" role="status"></div>
+      <footer class="page-footer"><span>ORACLE <i>·</i> Find the truth in your code.</span><span>Human review required for every finding.</span></footer>
+    </main>
+  </div>
+  <script src="/app.js" defer></script>
+</body>
+</html>
