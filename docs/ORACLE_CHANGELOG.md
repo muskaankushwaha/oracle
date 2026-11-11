@@ -1,5 +1,19 @@
 # ORACLE change log
 
+## 2026-11-11 - Create GitHub project README and screenshot gallery
+
+- Replaced the outdated setup-status README with a complete project overview covering the current MVP, architecture, AI methods, safety boundaries, local setup, configuration, team, and repository structure.
+- Added nine interface screenshots under `docs/images/oracle-screenshots/` and embedded them in the README gallery.
+- Changed `README.md`, `docs/ORACLE_CHANGELOG.md`, `docs/ROLLBACK_CHECKPOINTS.md`, `.oracle-history/restore-ui-baseline.ps1`, and added the screenshot assets. Pre-change checkpoint: `before-readme-showcase-20261111`.
+- Registered the checkpoint in the rollback index and restore script.
+
+## 2026-11-11 - Use a single free Render service
+
+- Replaced the separate public Node and paid private API services with one free Docker web service that runs Node and FastAPI together. The hosted service keeps `LLM_PROVIDER=none`; Ollama remains available for local use.
+- Added a minimal Render Python dependency list, container setup, process launcher, and Docker ignore rules. Updated deployment instructions with OAuth setup and free-tier sleep/resource limits.
+- Changed `render.yaml`, `server.js`, `README.md`, `Dockerfile`, `.dockerignore`, `requirements-render.txt`, `start-render.sh`, `docs/ORACLE_CHANGELOG.md`, `docs/ROLLBACK_CHECKPOINTS.md`, and `.oracle-history/restore-ui-baseline.ps1`. Pre-change checkpoint: `before-render-free-single-service-20261111`.
+- Registered the checkpoint in the rollback index and restore script.
+
 ## 2026-11-11 - Prepare Render deployment with hosted AI disabled
 
 - Added a Render Blueprint for a public Node dashboard and private FastAPI service, with a generated session secret, dashboard-to-API private host wiring, GitHub OAuth secrets entered in Render, and `LLM_PROVIDER=none` on the hosted API.

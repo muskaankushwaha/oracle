@@ -243,7 +243,7 @@ const server = http.createServer((req, res) => {
 
 if (require.main === module) {
   if (!SESSION_SECRET) console.warn('SESSION_SECRET is not configured. GitHub sign-in will stay disabled until .env is set.');
-  server.listen(PORT, () => console.log(`ORACLE is running at ${APP_URL}`));
+  server.listen(PORT, process.env.HOST || '127.0.0.1', () => console.log(`ORACLE is running at ${APP_URL}`));
 }
 
 module.exports = { server };
