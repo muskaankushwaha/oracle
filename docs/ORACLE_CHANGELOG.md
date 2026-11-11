@@ -1,5 +1,19 @@
 # ORACLE change log
 
+## 2026-11-11 - Prepare Render deployment with hosted AI disabled
+
+- Added a Render Blueprint for a public Node dashboard and private FastAPI service, with a generated session secret, dashboard-to-API private host wiring, GitHub OAuth secrets entered in Render, and `LLM_PROVIDER=none` on the hosted API.
+- Made the Node server use Render's generated external URL for the GitHub OAuth callback and accept the private service host:port while preserving localhost defaults. Documented deployment and OAuth callback setup.
+- Changed `server.js`, `render.yaml`, `README.md`, `docs/ORACLE_CHANGELOG.md`, `docs/ROLLBACK_CHECKPOINTS.md`, and `.oracle-history/restore-ui-baseline.ps1`. Pre-change checkpoint: `before-render-hosting-20261111`.
+- Registered the checkpoint in the rollback index and restore script.
+
+## 2026-11-11 - Add RAG-grounded LLM explanations
+
+- Added local BM25 retrieval over bounded source chunks, with common credential redaction and file/line citations. The LangGraph investigation now retrieves relevant excerpts for candidate findings and displays them in the dashboard.
+- Added opt-in Gemini and Ollama providers. A configured model receives the issue description, finding details, and retrieved excerpts for at most five findings; the GitHub token and full repository are excluded. Gemini is hosted; Ollama can run locally. Model explanations and fixes remain advisory, and provider failures do not stop the deterministic report.
+- Changed `.env.example`, `README.md`, `requirements.txt`, `oracle/config.py`, `oracle_api/analyzer.py`, `oracle_api/main.py`, `oracle_api/workflow.py`, `oracle_api/llm.py`, `oracle_api/rag.py`, `public/app.js`, and `public/styles.css`. Pre-change checkpoint: `before-llm-rag-20261111`.
+- Registered the checkpoint in `docs/ROLLBACK_CHECKPOINTS.md` and `.oracle-history/restore-ui-baseline.ps1`.
+
 ## 2026-11-01 - Prepare four code submission bundles
 
 - Added four contributor-specific files with 20 code snippets each, suggested commit messages, target source paths, and progress comments: frontend (`Iman`), Node/GitHub (`Teammate 1`), FastAPI/LangGraph (`Teammate 2`), and soft computing/evaluation (`Teammate 3`).

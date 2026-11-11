@@ -20,6 +20,7 @@ VALID_PROVIDERS = {"none", "gemini", "ollama"}
 class Settings:
     llm_provider: str = "none"
     gemini_api_key: str = ""
+    gemini_model: str = "gemini-3.5-flash-lite"
     ollama_model: str = "llama3.2:3b"
     ollama_host: str = "http://localhost:11434"
     demo_repo_path: Path = PROJECT_ROOT / "workspace" / "eshop"
@@ -44,6 +45,7 @@ def load_settings(env_file: Path | None = None) -> Settings:
     return Settings(
         llm_provider=provider,
         gemini_api_key=os.getenv("GEMINI_API_KEY", ""),
+        gemini_model=os.getenv("GEMINI_MODEL", Settings.gemini_model),
         ollama_model=os.getenv("OLLAMA_MODEL", Settings.ollama_model),
         ollama_host=os.getenv("OLLAMA_HOST", Settings.ollama_host),
         demo_repo_path=_resolve(os.getenv("DEMO_REPO_PATH", "workspace/eshop")),

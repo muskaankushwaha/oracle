@@ -21,9 +21,7 @@ pyvis>=0.3.2,<0.4
 # Testing
 pytest>=8.0,<10
 
-# Optional LLM explainer (uncomment the one you use)
-# google-genai>=1.0        # LLM_PROVIDER=gemini
-# ollama>=0.3              # LLM_PROVIDER=ollama
+# LLM calls use Python's standard HTTP client; no provider SDK is required.
 
 # Once everything installs cleanly on all four laptops, freeze exact versions with:
 #   pip freeze > requirements.lock.txt
