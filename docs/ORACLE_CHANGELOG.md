@@ -1,5 +1,12 @@
 # ORACLE change log
 
+## 2026-11-11 - Create GitHub project README and screenshot gallery
+
+- Replaced the outdated setup-status README with a complete project overview covering the current MVP, architecture, AI methods, safety boundaries, local setup, configuration, team, and repository structure.
+- Added nine interface screenshots under `docs/images/oracle-screenshots/` and embedded them in the README gallery.
+- Changed `README.md`, `docs/ORACLE_CHANGELOG.md`, `docs/ROLLBACK_CHECKPOINTS.md`, `.oracle-history/restore-ui-baseline.ps1`, and added the screenshot assets. Pre-change checkpoint: `before-readme-showcase-20261111`.
+- Registered the checkpoint in the rollback index and restore script.
+
 ## 2026-11-11 - Use a single free Render service
 
 - Replaced the separate public Node and paid private API services with one free Docker web service that runs Node and FastAPI together. The hosted service keeps `LLM_PROVIDER=none`; Ollama remains available for local use.
