@@ -84,26 +84,30 @@ The dashboard remains at `http://localhost:3000`; FastAPI's local API documentat
 `http://127.0.0.1:8001/docs` while the API terminal is running. GitHub OAuth values stay in
 the ignored `.env` file and are never sent to the browser.
 
-### Publish the web app on Render (AI off)
+### Publish on Render's free plan (Ollama stays local)
 
-The root `render.yaml` creates a public Node dashboard and a private FastAPI service in
-the same region. The hosted API sets `LLM_PROVIDER=none`; keep Ollama on your own computer
-for local investigations. Render's private API service requires an eligible paid service
-plan; free web instances cannot receive private-network requests.
+The root `render.yaml` creates **one free Docker web service**. The container runs the
+Node dashboard and FastAPI together, with FastAPI available only inside the container.
+The hosted service sets `LLM_PROVIDER=none`, so Ollama is used only for local runs and
+hosted investigations show deterministic findings and retrieved code without generated
+AI explanations.
 
-1. Push this project branch to GitHub and create a Render Blueprint from the repository,
-   selecting `render.yaml`.
-2. During Blueprint setup, enter `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`. Render
-   generates `SESSION_SECRET` and connects Node to FastAPI over the private network.
-3. After Render gives the `oracle-web` service its public URL, open your GitHub OAuth app's
-   settings. Set its callback URL to `https://YOUR-ORACLE-WEB-URL/auth/callback` and its
-   homepage URL to `https://YOUR-ORACLE-WEB-URL/`.
-4. Open the Render site, connect GitHub, and run an investigation. Hosted results include
-   local BM25-retrieved code excerpts; generated AI explanations remain disabled.
+1. Push the deployment files on your project branch to GitHub, then create a Render
+   Blueprint for that branch using the root `render.yaml`. Choose the **Free** plan if
+   Render asks for a plan.
+2. Enter `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` when prompted. Render generates
+   `SESSION_SECRET` for the service.
+3. Once the service has a public URL, set your GitHub OAuth app's homepage to
+   `https://YOUR-ORACLE-URL/` and callback to
+   `https://YOUR-ORACLE-URL/auth/callback`.
+4. Open the Render URL and connect GitHub. Repository analysis is read-only.
 
-Do not publish `.env` or put OAuth secrets in `render.yaml`. The Node service uses
-`RENDER_EXTERNAL_URL` for the OAuth callback base URL; local development continues to use
-`APP_URL` or `http://localhost:3000`.
+Render's free service sleeps after about 15 minutes without traffic, so the first visit
+after idling can take a while. Its filesystem is temporary and its memory/CPU allowance
+is small; large repository investigations may be slow or run out of memory. This is a
+free demonstration deployment, not a production availability guarantee. Do not publish
+`.env` or put OAuth secrets in `render.yaml`. Render supplies the public URL through
+`RENDER_EXTERNAL_URL`; local development continues to use `APP_URL` or localhost.
 
 ## Set up on your laptop
 
