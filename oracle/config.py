@@ -1,6 +1,4 @@
 """Settings, read from the .env file (copy .env.example to .env to start).
-
-Owner: Muskan Kushwaha
 """
 
 from __future__ import annotations
