@@ -22,7 +22,7 @@ NAME_PATTERN = re.compile(r"^[A-Za-z0-9_.-]{1,100}$")
 
 app = FastAPI(
     title="ORACLE Repository Tools",
-    description="Local, read-only GitHub inspection with explainable soft-computing analysis.",
+    description="Read-only GitHub inspection with explainable soft-computing analysis and optional RAG-grounded LLM explanations.",
     version="0.1.0",
 )
 

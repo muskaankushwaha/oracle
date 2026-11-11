@@ -6,11 +6,12 @@ const path = require('node:path');
 loadEnvFile();
 
 const PORT = Number(process.env.PORT || 3000);
-const APP_URL = (process.env.APP_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
+const APP_URL = (process.env.APP_URL || process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
 const CLIENT_ID = process.env.GITHUB_CLIENT_ID || '';
 const CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || '';
 const SESSION_SECRET = process.env.SESSION_SECRET || '';
-const ORACLE_TOOLS_URL = (process.env.ORACLE_TOOLS_URL || 'http://127.0.0.1:8001').replace(/\/$/, '');
+const oracleToolsHostPort = process.env.ORACLE_TOOLS_HOSTPORT || '';
+const ORACLE_TOOLS_URL = (process.env.ORACLE_TOOLS_URL || (oracleToolsHostPort ? `http://${oracleToolsHostPort}` : 'http://127.0.0.1:8001')).replace(/\/$/, '');
 const COOKIE_NAME = 'oracle_session';
 const SESSION_MAX_AGE_MS = 8 * 60 * 60 * 1000;
 const sessions = new Map();

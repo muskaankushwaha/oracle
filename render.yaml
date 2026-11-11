@@ -1,0 +1,33 @@
+services:
+  - type: pserv
+    name: oracle-api
+    runtime: python
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m uvicorn oracle_api.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: LLM_PROVIDER
+        value: none
+
+  - type: web
+    name: oracle-web
+    runtime: node
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: GITHUB_CLIENT_ID
+        sync: false
+      - key: GITHUB_CLIENT_SECRET
+        sync: false
+      - key: ORACLE_TOOLS_HOSTPORT
+        fromService:
+          type: pserv
+          name: oracle-api
+          property: hostport
+

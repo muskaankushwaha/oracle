@@ -240,6 +240,7 @@ def analyze_repository(owner: str, repo: str, token: str, github_json: GitHubJso
 
     findings = []
     scanned_files = []
+    rag_documents = []
     scanned_bytes = 0
     failed_files = 0
     for entry in candidates[:FILE_LIMIT]:
@@ -253,6 +254,7 @@ def analyze_repository(owner: str, repo: str, token: str, github_json: GitHubJso
             source = base64.b64decode(compact).decode("utf-8", errors="replace")
             scanned_bytes += len(source.encode("utf-8"))
             scanned_files.append(entry["path"])
+            rag_documents.append({"path": entry["path"], "content": source})
             findings.extend(analyze_text(entry["path"], source))
         except Exception:
             failed_files += 1
@@ -289,5 +291,6 @@ def analyze_repository(owner: str, repo: str, token: str, github_json: GitHubJso
         "testCandidates": test_candidates,
         "testHistory": test_history,
         "findings": findings,
+        "_ragDocuments": rag_documents,
         "disclaimer": "Heuristic findings need engineer review. A clean scan does not prove the repository is free of bugs or security issues.",
     }

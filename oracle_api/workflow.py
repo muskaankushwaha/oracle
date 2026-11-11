@@ -13,6 +13,8 @@ from oracle.softcomputing.ga_test_priority import prioritize_tests
 from oracle.softcomputing.log_classifier import classify_log_text
 
 from .analyzer import analyze_repository
+from .llm import explain_findings
+from .rag import retrieve_for_hypothesis
 
 GitHubJson = Callable[[str, str], dict]
 STOP_WORDS = {
@@ -27,6 +29,7 @@ class InvestigationState(TypedDict, total=False):
     scan_result: dict
     hypotheses: list[dict]
     riskAssessment: dict | None
+    aiAnalysis: dict
     logAnalysis: dict
     testPlan: dict
     investigation: dict
@@ -73,6 +76,7 @@ def _rank_hypotheses(issue_report: str, findings: list[dict], log_analysis: dict
             "evidence": finding.get("evidence", ""),
             "suggestion": finding.get("suggestion", "Review this source finding."),
             "reason": bayesian["reason"],
+            "findingId": finding.get("id", ""),
         })
 
     return sorted(
@@ -128,17 +132,40 @@ def run_investigation(
         plan["historyNote"] = scan.get("testHistory", {}).get("note", "")
         return {"testPlan": plan}
 
+    def retrieve_context_node(state: InvestigationState) -> dict:
+        documents = state["scan_result"].get("_ragDocuments", [])
+        hypotheses = state.get("hypotheses", [])
+        for index, hypothesis in enumerate(hypotheses):
+            hypothesis["ragSources"] = retrieve_for_hypothesis(
+                hypothesis, state.get("issue_report", ""), documents
+            ) if index < 8 else []
+        return {"hypotheses": hypotheses}
+
+    def explain_findings_node(state: InvestigationState) -> dict:
+        ai_analysis = explain_findings(
+            state.get("issue_report", ""), state.get("hypotheses", [])
+        )
+        explanations = ai_analysis.get("explanations", {})
+        for hypothesis in state.get("hypotheses", []):
+            generated = explanations.get(hypothesis.get("id"), {})
+            hypothesis["aiExplanation"] = generated.get("explanation", "")
+            hypothesis["aiSuggestedFix"] = generated.get("suggestedFix", "")
+        return {"hypotheses": state.get("hypotheses", []), "aiAnalysis": ai_analysis}
+
     def publish_report_node(state: InvestigationState) -> dict:
         findings = state["scan_result"].get("findings", [])
         hypotheses = state.get("hypotheses", [])
         logs = state["logAnalysis"].get("classifications", [])
         tests = state["testPlan"].get("tests", [])
+        ai_analysis = state.get("aiAnalysis", {})
         summary = (
             f"Ranked {len(hypotheses)} candidate cause(s) with Bayesian updates and "
             f"Mamdani fuzzy risk scoring; classified {len(logs)} supplied log line(s); "
             f"prioritized {len(tests)} test file(s). MLP scores use synthetic training "
-            "examples and are uncalibrated. Bayesian estimates use hand-set rule scores "
-            "and are not validated probabilities."
+            "examples and are uncalibrated. Repository context was retrieved locally for "
+            f"{sum(bool(item.get('ragSources')) for item in hypotheses)} candidate(s). "
+            + (f"Optional {ai_analysis.get('provider')} explanations are {ai_analysis.get('status')}. " if ai_analysis else "")
+            + "Bayesian estimates use hand-set rule scores and are not validated probabilities."
         ) if findings or logs or tests else (
             "No checked source patterns matched, no logs were supplied, and no test files "
             "were found. This does not prove the reported issue has no cause."
@@ -149,8 +176,10 @@ def run_investigation(
             "engine": "LangGraph",
             "steps": [
                 "read_repository", "scan_source", "classify_logs", "bayesian_update",
-                "fuzzy_risk_inference", "prioritize_tests", "publish_report",
+                "fuzzy_risk_inference", "retrieve_source_context", "generate_optional_explanations",
+                "prioritize_tests", "publish_report",
             ],
+            "hypotheses": hypotheses,
             "rankingMethod": (
                 "The rule confidence is an uncalibrated prior proxy. Issue-term overlap "
                 "and raw supplied-log term overlap produce a documented likelihood ratio "
@@ -159,7 +188,13 @@ def run_investigation(
                 "estimate. The MLP uses bundled synthetic examples; the genetic algorithm "
                 "orders discovered test files by likely risk-weighted coverage."
             ),
-            "usesExternalModel": False,
+            "rag": {
+                "method": "Local BM25 retrieval over short source-code chunks",
+                "sourceFiles": len(state["scan_result"].get("_ragDocuments", [])),
+                "note": "An enabled provider receives the issue description, finding details, and top retrieved excerpts for up to five findings; the GitHub token is never included.",
+            },
+            "aiAnalysis": ai_analysis,
+            "usesExternalModel": ai_analysis.get("status") == "complete" and ai_analysis.get("provider") == "gemini",
         }}
 
     graph = StateGraph(InvestigationState)
@@ -167,16 +202,21 @@ def run_investigation(
     graph.add_node("classify_logs", classify_logs_node)
     graph.add_node("rank_evidence", rank_evidence_node)
     graph.add_node("prioritize_tests", prioritize_tests_node)
+    graph.add_node("retrieve_context", retrieve_context_node)
+    graph.add_node("explain_findings", explain_findings_node)
     graph.add_node("publish_report", publish_report_node)
     graph.add_edge(START, "scan_repository")
     graph.add_edge("scan_repository", "classify_logs")
     graph.add_edge("classify_logs", "rank_evidence")
-    graph.add_edge("rank_evidence", "prioritize_tests")
+    graph.add_edge("rank_evidence", "retrieve_context")
+    graph.add_edge("retrieve_context", "explain_findings")
+    graph.add_edge("explain_findings", "prioritize_tests")
     graph.add_edge("prioritize_tests", "publish_report")
     graph.add_edge("publish_report", END)
     result = graph.compile().invoke({"issue_report": issue_report, "log_text": log_text})
 
     scan_result = result["scan_result"]
+    scan_result.pop("_ragDocuments", None)
     scan_result["hypotheses"] = result["hypotheses"]
     scan_result["investigation"] = result["investigation"]
     scan_result["riskAssessment"] = result["riskAssessment"]
