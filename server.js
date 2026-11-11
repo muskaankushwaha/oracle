@@ -142,6 +142,7 @@ async function handle(req, res) {
     redirect.searchParams.set('redirect_uri', `${APP_URL}/auth/callback`);
     redirect.searchParams.set('scope', 'read:user user:email');
     redirect.searchParams.set('state', state);
+    redirect.searchParams.set('prompt', 'select_account');
     return res.writeHead(302, { Location: redirect.toString(), 'Set-Cookie': cookieHeader(id, req), 'Cache-Control': 'no-store' }).end();
   }
 

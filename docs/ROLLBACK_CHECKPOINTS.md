@@ -36,6 +36,7 @@ Tell Codex: **"Roll back to `<checkpoint-name>`"**. It restores only that checkp
 | `before-render-hosting-20261111` | Local ORACLE setup before adding Render deployment configuration | `server.js`, `render.yaml`, `README.md`, `docs/ORACLE_CHANGELOG.md`, `docs/ROLLBACK_CHECKPOINTS.md`, `.oracle-history/restore-ui-baseline.ps1` |
 | `before-render-free-single-service-20261111` | Two-service Render setup before consolidating Node and FastAPI into one free Docker web service | `render.yaml`, `server.js`, `README.md`, `docs/ORACLE_CHANGELOG.md`, `docs/ROLLBACK_CHECKPOINTS.md`, `.oracle-history/restore-ui-baseline.ps1`; removes `Dockerfile`, `.dockerignore`, `requirements-render.txt`, and `start-render.sh` |
 | `before-readme-showcase-20261111` | Project README before adding the GitHub showcase, architecture guide, file structure, and screenshot gallery | `README.md`, `docs/ORACLE_CHANGELOG.md`, `docs/ROLLBACK_CHECKPOINTS.md`, `.oracle-history/restore-ui-baseline.ps1`; removes the nine files in `docs/images/oracle-screenshots/` |
+| `before-github-account-picker-20261111` | GitHub OAuth flow before prompting for an account on reconnect | `server.js`, `docs/ORACLE_CHANGELOG.md`, `docs/ROLLBACK_CHECKPOINTS.md`, `.oracle-history/restore-ui-baseline.ps1` |
 
 Snapshots are local under `.oracle-history/` and ignored by Git. Restore one with:
 

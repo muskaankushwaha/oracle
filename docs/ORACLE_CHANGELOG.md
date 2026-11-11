@@ -1,5 +1,11 @@
 # ORACLE change log
 
+## 2026-11-11 - Prompt for GitHub account when reconnecting
+
+- Added GitHub's `prompt=select_account` authorization option so the Connect with GitHub flow offers an account picker after ORACLE logout, even when the browser already has a GitHub session.
+- Changed `server.js`, `docs/ORACLE_CHANGELOG.md`, `docs/ROLLBACK_CHECKPOINTS.md`, and `.oracle-history/restore-ui-baseline.ps1`. Pre-change checkpoint: `before-github-account-picker-20261111`.
+- Registered the checkpoint in the rollback index and restore script.
+
 ## 2026-11-11 - Create GitHub project README and screenshot gallery
 
 - Replaced the outdated setup-status README with a complete project overview covering the current MVP, architecture, AI methods, safety boundaries, local setup, configuration, team, and repository structure.
